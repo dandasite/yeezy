@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Update Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        .status {
+            font-weight: bold;
+            color: green;
+        }
+        .alert {
+            font-weight: bold;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Website Update Tracker</h1>
+    <div class="container">
+        <p id="status" class="status">Tracking updates for: <a href="https://yzy-sply.com/" target="_blank">https://yzy-sply.com/</a></p>
+        <p id="update-message"></p>
+    </div>
+
+    <script>
+        let lastContent = "";
+
+        async function checkForUpdates() {
+            try {
+                const response = await fetch("https://yzy-sply.com/");
+                const newContent = await response.text();
+
+                if (lastContent && lastContent !== newContent) {
+                    document.getElementById("update-message").textContent = "The website has been updated!";
+                    document.getElementById("update-message").classList.add("alert");
+                    document.getElementById("update-message").classList.remove("status");
+                } else {
+                    document.getElementById("update-message").textContent = "No updates detected.";
+                    document.getElementById("update-message").classList.add("status");
+                    document.getElementById("update-message").classList.remove("alert");
+                }
+
+                lastContent = newContent;
+            } catch (error) {
+                document.getElementById("update-message").textContent = "Failed to check for updates.";
+                document.getElementById("update-message").classList.add("alert");
+            }
+        }
+
+        // Check for updates every 5 minutes (300000ms)
+        setInterval(checkForUpdates, 300000);
+        checkForUpdates(); // Initial check
+    </script>
+</body>
+</html>
